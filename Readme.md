@@ -1,7 +1,7 @@
 # Личный проект «Код и Магия» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Ecaterina Panteleev](https://up.htmlacademy.ru/javascript/4/user/90484).
-* Наставник: `Неизвестно`.
+* Наставник: Варя.
 
 ---
 
