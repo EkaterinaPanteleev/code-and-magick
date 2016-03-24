@@ -11,8 +11,7 @@ var getMessage = function(a,b) {
     return "Я прыгнул на " + a*100 + " сантиметров";
   }
 
-
-  if ((Array.isArray(a))&&(Array.isArray(b))) {
+  if (Array.isArray(a) && Array.isArray(b)) {
     var length = 0;
     for (var i=0; i<a.length; i++) {
       length+=a[i]*b[i];
@@ -29,5 +28,4 @@ var getMessage = function(a,b) {
 
     return "Я прошёл " + sum + " шагов";
   }
-
 }
