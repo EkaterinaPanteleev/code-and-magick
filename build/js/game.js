@@ -377,19 +377,70 @@
     /**
      * Отрисовка экрана паузы.
      */
+
     _drawPauseScreen: function() {
+      var getMessage = function(msgText) {
+        var canvas = document.querySelector('canvas');
+        var ctx = canvas.getContext('2d');
+        var x = 330;
+        var y = 80;
+        var msgWidth = 300;
+        var msgHeight = 150;
+        var msgParal = 20;
+        /*отрисовка тени*/
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.beginPath();
+        ctx.moveTo(x + 10, y + 10);
+        ctx.lineTo((x + 10) + msgWidth, (y + 10) - msgParal);
+        ctx.lineTo(((x + 10) + msgWidth) - msgParal, (y + 10) + msgHeight);
+        ctx.lineTo((x + 10) - msgParal, ((y + 10) + msgHeight) + msgParal);
+        ctx.closePath();
+        ctx.fill();
+        /*отрисовка блока сообщения*/
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + msgWidth, y - msgParal);
+        ctx.lineTo((x + msgWidth) - msgParal, y + msgHeight);
+        ctx.lineTo(x - msgParal, (y + msgHeight) + msgParal);
+        ctx.closePath();
+        ctx.fill();
+        /*текст сообщения*/
+        ctx.fillStyle = '#000';
+        ctx.font = '16px PT Mono';
+        ctx.textBaseline = 'hanging';
+        var words = msgText.split(' ');
+        var line = '';
+        var maxWidth = msgWidth - 25;
+        var lineHeight = 25;
+        var marginLeft = x + 10;
+        var marginTop = y + 10;
+        for(var i = 0; i < words.length; i++) {
+          var testLine = line + words[i] + ' ';
+          var testWidth = ctx.measureText(testLine).width;
+          if(testWidth > maxWidth) {
+            ctx.fillText(line, marginLeft, marginTop);
+            line = words[i] + ' ';
+            marginTop = marginTop + lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, marginLeft, marginTop);
+      };
+
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          getMessage('Ты выйграл! Ура!');
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          getMessage('К сожалению, ты проиграл. Не унывай)');
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          getMessage('Пауза. Можно перевести дух.');
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          getMessage('Привет. По нажатию на стрелки я перемещаюсь. Чтобы пальнуть файерболом, жми шифт. Для начала игры жми пробел.');
           break;
       }
     },
