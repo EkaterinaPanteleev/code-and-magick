@@ -379,24 +379,19 @@
      */
 
     _drawPauseScreen: function() {
-      var getMessage = function(msgText) {
+      var getMessage = function(msgText, maxWidth) {
         var canvas = document.querySelector('canvas');
         var ctx = canvas.getContext('2d');
         var x = 330;
         var y = 80;
-        var msgWidth = 300;
-        var msgHeight = 150;
+        var msgWidth = maxWidth + 25;
         var msgParal = 20;
-        /*отрисовка тени*/
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.beginPath();
-        ctx.moveTo(x + 10, y + 10);
-        ctx.lineTo((x + 10) + msgWidth, (y + 10) - msgParal);
-        ctx.lineTo(((x + 10) + msgWidth) - msgParal, (y + 10) + msgHeight);
-        ctx.lineTo((x + 10) - msgParal, ((y + 10) + msgHeight) + msgParal);
-        ctx.closePath();
-        ctx.fill();
+        var msgHeight = 150;
+
         /*отрисовка блока сообщения*/
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+        ctx.shadowOffsetX = 10;
+        ctx.shadowOffsetY = 10;
         ctx.fillStyle = '#fff';
         ctx.beginPath();
         ctx.moveTo(x, y);
@@ -405,13 +400,15 @@
         ctx.lineTo(x - msgParal, (y + msgHeight) + msgParal);
         ctx.closePath();
         ctx.fill();
+
         /*текст сообщения*/
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
         ctx.fillStyle = '#000';
         ctx.font = '16px PT Mono';
         ctx.textBaseline = 'hanging';
         var words = msgText.split(' ');
         var line = '';
-        var maxWidth = msgWidth - 25;
         var lineHeight = 25;
         var marginLeft = x + 10;
         var marginTop = y + 10;
@@ -421,7 +418,7 @@
           if(testWidth > maxWidth) {
             ctx.fillText(line, marginLeft, marginTop);
             line = words[i] + ' ';
-            marginTop = marginTop + lineHeight;
+            marginTop += lineHeight;
           } else {
             line = testLine;
           }
@@ -431,16 +428,16 @@
 
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          getMessage('Ты выйграл! Ура!');
+          getMessage('Ты выйграл! Ура!', 150);
           break;
         case Verdict.FAIL:
-          getMessage('К сожалению, ты проиграл. Не унывай)');
+          getMessage('К сожалению, ты проиграл. Не унывай)', 200);
           break;
         case Verdict.PAUSE:
-          getMessage('Пауза. Можно перевести дух.');
+          getMessage('Пауза. Можно перевести дух.', 100);
           break;
         case Verdict.INTRO:
-          getMessage('Привет. По нажатию на стрелки я перемещаюсь. Чтобы пальнуть файерболом, жми шифт. Для начала игры жми пробел.');
+          getMessage('Привет. По нажатию на стрелки я перемещаюсь. Чтобы пальнуть файерболом, жми шифт. Для начала игры жми пробел.', 300);
           break;
       }
     },
