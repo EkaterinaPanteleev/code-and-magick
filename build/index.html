@@ -60,7 +60,7 @@
 </main>
 
 <div class="overlay-container invisible">
-  <form class="overlay review-form" action="index.html" method="post">
+  <form class="overlay review-form" action="index.html" method="post" name="review-form">
     <h2 class="review-form-title">Оставить отзыв</h2>
     <span class="review-form-close">&times;</span>
 
@@ -74,12 +74,12 @@
     </fieldset>
 
     <fieldset class="review-form-group">
-      <label for="review-name" class="review-form-label">Имя</label><br>
+      <label for="review-name" class="review-form-label">Имя<span class="required-field required-field-name">*</span></label><br>
       <input type="text" name="review-name" id="review-name" class="review-form-field review-form-field-name">
     </fieldset>
 
     <fieldset class="review-form-group">
-      <label for="review-text" class="review-form-label">Отзыв</label><br>
+      <label for="review-text" class="review-form-label">Отзыв<span class="required-field required-field-desc">*</span></label><br>
       <textarea name="review-text" id="review-text" class="review-form-field review-form-field-text" cols="32" rows="8"></textarea>
     </fieldset>
 
