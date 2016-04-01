@@ -451,6 +451,10 @@ input[type=radio]:checked + .review-mark-label {
   line-height: 1.6;
 }
 
+.required-field {
+  color: red;
+}
+
 .review-form-field {
   padding: 5px;
 
