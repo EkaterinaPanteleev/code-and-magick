@@ -27,12 +27,14 @@
   var requiredDescription = document.querySelector('.required-field-desc');
   submitButton.disabled = true;
   requiredDescription.classList.add('invisible');
-  requiredName.classList.add('invisible');
+  requiredName.classList.remove('invisible');
+  nameLabel.classList.remove('invisible');
   descriptionLabel.classList.add('invisible');
-  nameLabel.classList.add('invisible');
   /**
   *form validation function
   */
+
+
   function checkValid() {
     var isValid = false;
     var reviewMarkChecked = document.querySelector('input[name="review-mark"]:checked');
@@ -75,15 +77,27 @@
     reviewMark[i].onchange = checkValid;
   }
 
-  name.onkeyup = checkValid;
-  description.onkeyup = checkValid;
+  name.oninput = checkValid;
+  description.oninput = checkValid;
   /**
   *cookeis
   */
   var browserCookies = require('browser-cookies');
-  var reviewMarkChecked = document.querySelector('input[name="review-mark"]:checked');
   name.value = browserCookies.get('name') || '';
-  reviewMarkChecked.value = browserCookies.get('reviewMarkChecked') || 3;
+  var markToCheck = browserCookies.get('markToCookies') || '3';
+  if (markToCheck < 3) {
+    requiredDescription.classList.remove('invisible');
+    descriptionLabel.classList.remove('invisible');
+  }
+  for (i = 0; i < reviewMark.length; i++) {
+    if (reviewMark[i].value === markToCheck) {
+      reviewMark[i].checked = true;
+    } else {
+      reviewMark[i].checked = false;
+    }
+  }
+  checkValid();
+
   /**
   * рассчет количества дней, прошедших с последнего дня рождения
   */
@@ -95,10 +109,12 @@
   reviewForm.onsubmit = function(event) {
     event.preventDefault();
     browserCookies.set('name', name.value, {
-      expires: (today - birthDay)
+      expires: (today) - (birthDay)
     });
-    browserCookies.set('reviewMarkChecked', reviewMarkChecked.value, {
-      expires: (today - birthDay)
+    var markToCookies = document.querySelector('input[name="review-mark"]:checked');
+    console.log(markToCookies);
+    browserCookies.set('markToCookies', markToCookies.value, {
+      expires: (today) - (birthDay)
     });
     this.submit();
   };
