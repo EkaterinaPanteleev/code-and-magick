@@ -15,6 +15,7 @@
     formContainer.classList.add('invisible');
   };
 
+  var reviewForm = document.querySelector('.review-form');
   var name = document.querySelector('#review-name');
   var description = document.querySelector('#review-text');
   var reviewMark = document.querySelectorAll('input[name="review-mark"]');
@@ -26,8 +27,12 @@
   var requiredDescription = document.querySelector('.required-field-desc');
   submitButton.disabled = true;
   requiredDescription.classList.add('invisible');
-  requiredName.classList.remove('invisible');
+  requiredName.classList.add('invisible');
   descriptionLabel.classList.add('invisible');
+  nameLabel.classList.add('invisible');
+  /**
+  *form validation function
+  */
   function checkValid() {
     var isValid = false;
     var reviewMarkChecked = document.querySelector('input[name="review-mark"]:checked');
@@ -66,12 +71,36 @@
       blockLabel.classList.remove('invisible');
     }
   }
-
   for (var i = 0; i < reviewMark.length; i++) {
     reviewMark[i].onchange = checkValid;
   }
 
   name.onkeyup = checkValid;
   description.onkeyup = checkValid;
+  /**
+  *cookeis
+  */
+  var browserCookies = require('browser-cookies');
+  var reviewMarkChecked = document.querySelector('input[name="review-mark"]:checked');
+  name.value = browserCookies.get('name') || '';
+  reviewMarkChecked.value = browserCookies.get('reviewMarkChecked') || 3;
+  /**
+  * рассчет количества дней, прошедших с последнего дня рождения
+  */
+  var today = new Date();
+  var birthDay = new Date(today.getFullYear(), 10, 28);
+  if ((today.getMonth() < 10) || (today.getMonth() === 10 && today.getDate() < 28)) {
+    birthDay.setFullYear(birthDay.getFullYear() - 1);
+  }
+  reviewForm.onsubmit = function(event) {
+    event.preventDefault();
+    browserCookies.set('name', name.value, {
+      expires: (today - birthDay)
+    });
+    browserCookies.set('reviewMarkChecked', reviewMarkChecked.value, {
+      expires: (today - birthDay)
+    });
+    this.submit();
+  };
 })();
 
