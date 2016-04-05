@@ -33,8 +33,6 @@
   /**
   *form validation function
   */
-
-
   function checkValid() {
     var isValid = false;
     var reviewMarkChecked = document.querySelector('input[name="review-mark"]:checked');
@@ -80,15 +78,11 @@
   name.oninput = checkValid;
   description.oninput = checkValid;
   /**
-  *cookeis
+  *cookies
   */
   var browserCookies = require('browser-cookies');
   name.value = browserCookies.get('name') || '';
   var markToCheck = browserCookies.get('markToCookies') || '3';
-  if (markToCheck < 3) {
-    requiredDescription.classList.remove('invisible');
-    descriptionLabel.classList.remove('invisible');
-  }
   for (i = 0; i < reviewMark.length; i++) {
     if (reviewMark[i].value === markToCheck) {
       reviewMark[i].checked = true;
@@ -112,7 +106,6 @@
       expires: (today) - (birthDay)
     });
     var markToCookies = document.querySelector('input[name="review-mark"]:checked');
-    console.log(markToCookies);
     browserCookies.set('markToCookies', markToCookies.value, {
       expires: (today) - (birthDay)
     });
