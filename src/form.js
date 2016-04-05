@@ -78,7 +78,7 @@
   name.oninput = checkValid;
   description.oninput = checkValid;
   /**
-  *cookies
+  *cookeis
   */
   var browserCookies = require('browser-cookies');
   name.value = browserCookies.get('name') || '';
