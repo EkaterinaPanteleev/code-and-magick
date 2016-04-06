@@ -15,6 +15,7 @@
     formContainer.classList.add('invisible');
   };
 
+  var reviewForm = document.querySelector('.review-form');
   var name = document.querySelector('#review-name');
   var description = document.querySelector('#review-text');
   var reviewMark = document.querySelectorAll('input[name="review-mark"]');
@@ -27,7 +28,11 @@
   submitButton.disabled = true;
   requiredDescription.classList.add('invisible');
   requiredName.classList.remove('invisible');
+  nameLabel.classList.remove('invisible');
   descriptionLabel.classList.add('invisible');
+  /**
+  *form validation function
+  */
   function checkValid() {
     var isValid = false;
     var reviewMarkChecked = document.querySelector('input[name="review-mark"]:checked');
@@ -66,12 +71,45 @@
       blockLabel.classList.remove('invisible');
     }
   }
-
   for (var i = 0; i < reviewMark.length; i++) {
     reviewMark[i].onchange = checkValid;
   }
 
-  name.onkeyup = checkValid;
-  description.onkeyup = checkValid;
+  name.oninput = checkValid;
+  description.oninput = checkValid;
+  /**
+  *cookies
+  */
+  var browserCookies = require('browser-cookies');
+  name.value = browserCookies.get('name') || '';
+  var markToCheck = browserCookies.get('markToCookies') || '3';
+  for (i = 0; i < reviewMark.length; i++) {
+    if (reviewMark[i].value === markToCheck) {
+      reviewMark[i].checked = true;
+    } else {
+      reviewMark[i].checked = false;
+    }
+  }
+  checkValid();
+
+  /**
+  * рассчет количества дней, прошедших с последнего дня рождения
+  */
+  var today = new Date();
+  var birthDay = new Date(today.getFullYear(), 10, 28);
+  if ((today.getMonth() < 10) || (today.getMonth() === 10 && today.getDate() < 28)) {
+    birthDay.setFullYear(birthDay.getFullYear() - 1);
+  }
+  reviewForm.onsubmit = function(event) {
+    event.preventDefault();
+    browserCookies.set('name', name.value, {
+      expires: (today) - (birthDay)
+    });
+    var markToCookies = document.querySelector('input[name="review-mark"]:checked');
+    browserCookies.set('markToCookies', markToCookies.value, {
+      expires: (today) - (birthDay)
+    });
+    this.submit();
+  };
 })();
 
