@@ -51,6 +51,8 @@ var getReviewElement = function(data, container) {
   return element;
 };
 
+reviewsFilter.classList.remove('invisible');
+
 window.reviews.forEach(function(review) {
   getReviewElement(review, reviewsContainer);
 });
