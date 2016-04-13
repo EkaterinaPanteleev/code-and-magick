@@ -100,12 +100,14 @@ var setFilterEnabled = function(filter) {
 
 var setFiltrationEnabled = function(enabled) {
   var filters = filtersContainer.querySelectorAll('input[name="reviews"]');
-  for(var i = 0; i < filters.lenght; i++) {
-    filters[i].onchange = enabled ? function() {
+  for(var i = 0; i < filters.length; i++) {
+    filters[i].onclick = enabled ? function() {
       setFilterEnabled(this.id);
+      console.log(this.id);
     } : null;
   }
 };
+
 
 /** @param {function(Array.<Object>)} callback */
 var getReviews = function(callback) {
