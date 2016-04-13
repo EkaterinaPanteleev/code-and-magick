@@ -70,16 +70,17 @@ var getReviewElement = function(data, container) {
 
 
 /** @param {Array.<Object>} reviews */
-var renderReviews = function(reviews) {
+var renderReviews = function(reviewsToRender) {
+  reviewsToRender = reviews;
   reviewsContainer.innerHTML = '';
   reviewsBlock.classList.remove('reviews-list-loading');
-  reviews.forEach(function(review) {
+  reviewsToRender.forEach(function(review) {
     getReviewElement(review, reviewsContainer);
   });
 };
 
-var getFilteredReviews = function(reviews, filter) {
-  var reviewsToFilter = reviews.slice(0);
+var getFilteredReviews = function(reviewsToFilter, filter) {
+  reviewsToFilter = reviews.slice(0);
 
   switch(filter) {
     case Filter.BAD:
@@ -100,7 +101,7 @@ var setFilterEnabled = function(filter) {
 var setFiltrationEnabled = function(enabled) {
   var filters = filtersContainer.querySelectorAll('input[name="reviews"]');
   for(var i = 0; i < filters.lenght; i++) {
-    filters[i].onchange = enabled ? function(event) {
+    filters[i].onchange = enabled ? function() {
       setFilterEnabled(this.id);
     } : null;
   }
