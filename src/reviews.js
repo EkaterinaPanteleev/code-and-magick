@@ -71,7 +71,6 @@ var getReviewElement = function(data, container) {
 
 /** @param {Array.<Object>} reviews */
 var renderReviews = function(reviewsToRender) {
-  reviewsToRender = reviews;
   reviewsContainer.innerHTML = '';
   reviewsBlock.classList.remove('reviews-list-loading');
   reviewsToRender.forEach(function(review) {
@@ -83,13 +82,40 @@ var getFilteredReviews = function(reviewsToFilter, filter) {
   reviewsToFilter = reviews.slice(0);
 
   switch(filter) {
+    case Filter.RECENT:
+      var recentReviews = reviewsToFilter.filter(function(review) {
+        var endPeriod = new Date() - 14 * 24 * 60 * 60 * 1000;
+        return Date.parse(review.date) > endPeriod;
+      });
+      reviewsToFilter = recentReviews.sort(function(a, b) {
+        return new Date(b.date) - new Date(a.date);
+      });
+      break;
+
+    case Filter.GOOD:
+      var goodReviews = reviewsToFilter.filter(function(review) {
+        return review.rating >= 3;
+      });
+      reviewsToFilter = goodReviews.sort(function(a, b) {
+        return b.rating - a.rating;
+      });
+      break;
+
     case Filter.BAD:
-      reviewsToFilter.sort(function(a, b) {
+      var badReviews = reviewsToFilter.filter(function(review) {
+        return review.rating <= 2;
+      });
+      reviewsToFilter = badReviews.sort(function(a, b) {
         return a.rating - b.rating;
       });
       break;
-  }
 
+    case Filter.POPULAR:
+      reviewsToFilter.sort(function(a, b) {
+        return b.review_usefulness - a.review_usefulness;
+      });
+      break;
+  }
   return reviewsToFilter;
 };
 
@@ -103,7 +129,6 @@ var setFiltrationEnabled = function(enabled) {
   for(var i = 0; i < filters.length; i++) {
     filters[i].onclick = enabled ? function() {
       setFilterEnabled(this.id);
-      console.log(this.id);
     } : null;
   }
 };
