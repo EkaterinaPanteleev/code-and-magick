@@ -715,6 +715,31 @@
 
     /** @private */
     _initializeGameListeners: function() {
+      function parallaxCloud() {
+        var scrollTimeout;
+        var cloudsBlock = document.querySelector('.header-clouds');
+        var scrollTop = window.pageYOffset;
+        var cloudsHight = cloudsBlock.offsetHeight;
+        var cloudsPosition = '-' + scrollTop + 'px';
+        cloudsBlock.style.backgroundPosition = cloudsPosition;
+
+        var gameBottomReached = function() {
+          var gameElement = document.querySelector('.demo');
+          var gamePosition = gameElement.getBoundingClientRect();
+          return gamePosition.top <= 0;
+        };
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(function() {
+          if (scrollTop >= cloudsHight) {
+            window.removeEventListener('scroll', parallaxCloud);
+          }
+          if (gameBottomReached()) {
+            console.log('YYY');
+            game.setGameStatus(window.Game.Verdict.PAUSE);
+          }
+        }, 100);
+      }
+      window.addEventListener('scroll', parallaxCloud);
       window.addEventListener('keydown', this._onKeyDown);
       window.addEventListener('keyup', this._onKeyUp);
     },

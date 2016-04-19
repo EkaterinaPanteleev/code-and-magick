@@ -270,6 +270,7 @@
      * и время проведенное на уровне и в игре.
      * @return {Object}
      */
+
     getInitialState: function() {
       return {
         // Статус игры. Если CONTINUE, то игра продолжается.
@@ -380,6 +381,7 @@
 
     _drawPauseScreen: function() {
       var getMessage = function(msgText, maxWidth) {
+        console.log('KKK');
         var canvas = document.querySelector('canvas');
         var ctx = canvas.getContext('2d');
         var x = 330;
@@ -715,6 +717,10 @@
 
     /** @private */
     _initializeGameListeners: function() {
+      console.log('HHH');
+      window.addEventListener('scroll', function() {
+        console.log('HHH');
+      });
       window.addEventListener('keydown', this._onKeyDown);
       window.addEventListener('keyup', this._onKeyUp);
     },
@@ -726,10 +732,18 @@
     }
   };
 
+  /*var cloudsMove = window.addEventListener('scroll', function() {
+    console.log('HHH');
+  });
+
+  cloudsMove();*/
+console.log('HHH');
   window.Game = Game;
   window.Game.Verdict = Verdict;
 
   var game = new Game(document.querySelector('.demo'));
   game.initializeLevelAndStart();
   game.setGameStatus(window.Game.Verdict.INTRO);
+
+
 })();
