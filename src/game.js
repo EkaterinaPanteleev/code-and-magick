@@ -715,13 +715,16 @@
 
     /** @private */
     _initializeGameListeners: function() {
+      var isParallax = true;
       function parallaxCloud() {
         var scrollTimeout;
         var cloudsBlock = document.querySelector('.header-clouds');
         var scrollTop = window.pageYOffset;
         var cloudsHight = cloudsBlock.offsetHeight;
-        var cloudsPosition = '-' + scrollTop + 'px';
-        cloudsBlock.style.backgroundPosition = cloudsPosition;
+        if (isParallax) {
+          var cloudsPosition = '-' + scrollTop + 'px';
+          cloudsBlock.style.backgroundPosition = cloudsPosition;
+        }
 
         var gameBottomReached = function() {
           var gameElement = document.querySelector('.demo');
@@ -731,7 +734,9 @@
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(function() {
           if (scrollTop >= cloudsHight) {
-            window.removeEventListener('scroll', parallaxCloud);
+            isParallax = false;
+          } else {
+            isParallax = true;
           }
           if (gameBottomReached()) {
             console.log('YYY');
