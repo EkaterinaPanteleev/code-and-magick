@@ -713,38 +713,36 @@
       }
     },
 
-    /** @private */
-    _initializeGameListeners: function() {
-      var isParallax = true;
-      function parallaxCloud() {
-        var scrollTimeout;
-        var cloudsBlock = document.querySelector('.header-clouds');
-        var scrollTop = window.pageYOffset;
-        var cloudsHight = cloudsBlock.offsetHeight;
-        if (isParallax) {
+    _parallaxCloud: function() {
+      var scrollTimeout;
+      var cloudsBlock = document.querySelector('.header-clouds');
+      var scrollTop = window.pageYOffset;
+      var cloudsHight = cloudsBlock.offsetHeight;
+      var isParallax = function() {
+        if (scrollTop < cloudsHight) {
           var cloudsPosition = '-' + scrollTop + 'px';
           cloudsBlock.style.backgroundPosition = cloudsPosition;
         }
+      };
 
-        var gameBottomReached = function() {
-          var gameElement = document.querySelector('.demo');
-          var gamePosition = gameElement.getBoundingClientRect();
-          return gamePosition.top <= 0;
-        };
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(function() {
-          if (scrollTop >= cloudsHight) {
-            isParallax = false;
-          } else {
-            isParallax = true;
-          }
-          if (gameBottomReached()) {
-            console.log('YYY');
-            game.setGameStatus(window.Game.Verdict.PAUSE);
-          }
-        }, 100);
-      }
-      window.addEventListener('scroll', parallaxCloud);
+      var gameBottomReached = function() {
+        var gameElement = document.querySelector('.demo');
+        var gamePosition = gameElement.getBoundingClientRect();
+        return gamePosition.bottom <= 0;
+      };
+
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(function() {
+        isParallax();
+        if (gameBottomReached()) {
+          game.setGameStatus(window.Game.Verdict.PAUSE);
+        }
+      }, 100);
+    },
+
+    /** @private */
+    _initializeGameListeners: function() {
+      window.addEventListener('scroll', this._parallaxCloud);
       window.addEventListener('keydown', this._onKeyDown);
       window.addEventListener('keyup', this._onKeyUp);
     },
