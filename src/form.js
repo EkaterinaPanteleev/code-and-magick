@@ -1,6 +1,7 @@
 'use strict';
 
 (function() {
+  var utils = require('./utils');
   var formContainer = document.querySelector('.overlay-container');
   var formOpenButton = document.querySelector('.reviews-controls-new');
   var formCloseButton = document.querySelector('.review-form-close');
@@ -92,22 +93,14 @@
   }
   checkValid();
 
-  /**
-  * рассчет количества дней, прошедших с последнего дня рождения
-  */
-  var today = new Date();
-  var birthDay = new Date(today.getFullYear(), 10, 28);
-  if ((today.getMonth() < 10) || (today.getMonth() === 10 && today.getDate() < 28)) {
-    birthDay.setFullYear(birthDay.getFullYear() - 1);
-  }
   reviewForm.onsubmit = function(event) {
     event.preventDefault();
     browserCookies.set('name', name.value, {
-      expires: (today) - (birthDay)
+      expires: utils.cookieToExpire
     });
     var markToCookies = document.querySelector('input[name="review-mark"]:checked');
     browserCookies.set('markToCookies', markToCookies.value, {
-      expires: (today) - (birthDay)
+      expires: utils.cookieToExpire
     });
     this.submit();
   };
