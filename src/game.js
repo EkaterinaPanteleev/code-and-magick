@@ -718,12 +718,14 @@
       var cloudsBlock = document.querySelector('.header-clouds');
       var scrollTop = window.pageYOffset;
       var cloudsHight = cloudsBlock.offsetHeight;
-      var isParallax = function() {
-        if (scrollTop < cloudsHight) {
-          var cloudsPosition = '-' + scrollTop + 'px';
-          cloudsBlock.style.backgroundPosition = cloudsPosition;
-        }
+      var setParallax = function() {
+        var cloudsPosition = '-' + scrollTop + 'px';
+        cloudsBlock.style.backgroundPosition = cloudsPosition;
       };
+
+      if (scrollTop < cloudsHight) {
+        setParallax();
+      }
 
       var gameBottomReached = function() {
         var gameElement = document.querySelector('.demo');
@@ -733,7 +735,9 @@
 
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(function() {
-        isParallax();
+        if (scrollTop > cloudsHight) {
+          cloudsBlock.style.backgroundPosition = '';
+        }
         if (gameBottomReached()) {
           game.setGameStatus(window.Game.Verdict.PAUSE);
         }
