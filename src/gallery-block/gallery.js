@@ -1,27 +1,16 @@
 'use strict';
-var utils = require('./utils');
+var utils = require('../utils');
+var picturesToShow = require('./fn_getPictures');
 var overlayGallery = document.querySelector('.overlay-gallery');
 var closeButton = document.querySelector('.overlay-gallery-close');
 var controlLeft = document.querySelector('.overlay-gallery-control-left');
 var controlRight = document.querySelector('.overlay-gallery-control-right');
-var pictureContainer = document.querySelector('.overlay-gallery-preview');
+var pictureContainer = document.querySelector('.overlay-gallery-preview-picture');
+var currentNumber = document.querySelector('.preview-number-current');
+var totalNumber = document.querySelector('.preview-number-total');
 var imgs = document.querySelectorAll('.photogallery-image > img');
-
-var srcValues = [];
 var activePicture;
-var picturesToShow;
 
-var getSrcValues = function() {
-  for (var i = 0; i < imgs.length; i++) {
-    var src = imgs[i].getAttribute('src');
-    srcValues.push(src);
-  }
-};
-
-var getPictures = function(pictures) {
-  picturesToShow = pictures;
-  return picturesToShow;
-};
 
 var controlCheck = function() {
   if (activePicture <= 0) {
@@ -40,7 +29,15 @@ var showGallery = function(pictureNumber) {
   overlayGallery.classList.remove('invisible');
   activePicture = pictureNumber;
   controlCheck();
+  currentNumber.innerHTML = '';
+  currentNumber.innerHTML = pictureNumber + 1;
+  totalNumber.innerHTML = '';
+  totalNumber.innerHTML = picturesToShow.length;
   showPicture(picturesToShow[pictureNumber]);
+  controlLeft.addEventListener('click', _onPrevClickHandler);
+  controlRight.addEventListener('click', _onNextClickHandler);
+  closeButton.addEventListener('click', _onCloseClickHandler);
+  document.addEventListener('keydown', _onDocumentKeydownHandler);
 };
 
 var showPicture = function(pic) {
@@ -52,16 +49,13 @@ var showPicture = function(pic) {
 
 var hideGallery = function() {
   overlayGallery.classList.add('invisible');
+  controlLeft.removeEventListener('click', _onPrevClickHandler);
+  controlRight.removeEventListener('click', _onNextClickHandler);
+  closeButton.removeEventListener('click', _onCloseClickHandler);
+  document.removeEventListener('keydown', _onDocumentKeydownHandler);
 };
 
-var _onPictureClickHandler = function() {
-  var currentPicture;
-  for (var i = 0; i < picturesToShow.length; i++) {
-    if (picturesToShow[i] === 'img/screenshots/2.png') {
-      currentPicture = i;
-      console.log(currentPicture);
-    }
-  }
+var _onPictureClickHandler = function(currentPicture) {
   showGallery(currentPicture);
 };
 
@@ -84,13 +78,12 @@ var _onDocumentKeydownHandler = function() {
   }
 };
 
-getSrcValues();
-getPictures(srcValues);
-
 for (var i = 0; i < imgs.length; i++) {
-  imgs[i].addEventListener('click', _onPictureClickHandler);
+  imgs[i].addEventListener('click', (function(memorizedI) {
+    return function() {
+      _onPictureClickHandler(memorizedI);
+    };
+  })(i));
 }
-controlLeft.addEventListener('click', _onPrevClickHandler);
-controlRight.addEventListener('click', _onNextClickHandler);
-closeButton.addEventListener('click', _onCloseClickHandler);
-document.addEventListener('keydown', _onDocumentKeydownHandler);
+
+
