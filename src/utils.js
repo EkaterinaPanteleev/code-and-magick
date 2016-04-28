@@ -3,6 +3,12 @@
 */
 'use strict';
 
+/** @enum {number} */
+var KeyCode = {
+  ESC: 27
+};
+
+
 module.exports = {
   isNextPageAvailable: function(reviewsToCheck, page, pageSize) {
     if (reviewsToCheck.length % pageSize === 0) {
@@ -23,5 +29,13 @@ module.exports = {
     }
     var expireDate = (today) - (birthDay);
     return expireDate;
+  },
+
+  /**
+     * @param {Event} evt
+     * @return {boolean}
+   */
+  isDeactivationEvent: function(event) {
+    return event.keyCode === KeyCode.ESC;
   }
 };
