@@ -1,6 +1,5 @@
 'use strict';
-var utils = require('../utils');
-var picturesToShow = require('./fn_getPictures');
+var utils = require('./utils');
 var overlayGallery = document.querySelector('.overlay-gallery');
 var closeButton = document.querySelector('.overlay-gallery-close');
 var controlLeft = document.querySelector('.overlay-gallery-control-left');
@@ -11,6 +10,17 @@ var totalNumber = document.querySelector('.preview-number-total');
 var imgs = document.querySelectorAll('.photogallery-image > img');
 var activePicture;
 
+var picturesToShow = [];
+
+var getPictures = function() {
+  for (var i = 0; i < imgs.length; i++) {
+    var src = imgs[i].getAttribute('src');
+    picturesToShow.push(src);
+  }
+  return picturesToShow;
+};
+
+getPictures();
 
 var controlCheck = function() {
   if (activePicture <= 0) {
@@ -87,3 +97,5 @@ for (var i = 0; i < imgs.length; i++) {
 }
 
 
+module.exports = getPictures;
+module.exports = showGallery;
