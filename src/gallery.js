@@ -20,8 +20,6 @@ var getPictures = function() {
   return picturesToShow;
 };
 
-getPictures();
-
 var controlCheck = function() {
   if (activePicture <= 0) {
     controlLeft.classList.add('invisible');
@@ -96,6 +94,9 @@ for (var i = 0; i < imgs.length; i++) {
   })(i));
 }
 
+module.exports = {
+  getPictures: getPictures,
+  showGallery: showGallery
+};
 
-module.exports = getPictures;
-module.exports = showGallery;
+
