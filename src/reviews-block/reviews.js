@@ -1,10 +1,11 @@
 'use strict';
 
+
 var getFilteredReviews = require('./filter/filter');
 var FilterType = require('./filter/filter-type');
 var load = require('./load');
-var getReviewElement = require('./get-review-element');
 var utils = require('../utils');
+var Review = require('./review');
 
 var filtersContainer = document.querySelector('.reviews-filter');
 var reviewsBlock = document.querySelector('.reviews');
@@ -19,6 +20,7 @@ var REVIEWS_LOAD_URL = '//o0.github.io/assets/json/reviews.json';
  * Initial list of loaded reviews. Is used for filtering.
  */
 var reviews = [];
+var renderedReviews = [];
 
 /**
  * Current state of review list, which takes filtration and sorting.
@@ -35,15 +37,21 @@ var pageNumber = 0;
 
 /** @param {Array.<Object>} reviews */
 var renderReviews = function(reviewsToRender, page, replace) {
-  if(replace) {
+  /*if(replace) {
     reviewsContainer.innerHTML = '';
     moreReviews.classList.add('invisible');
+  }*/
+  if(replace) {
+    renderedReviews.forEach(function(review) {
+      review.remove();
+    });
+    renderedReviews = [];
   }
   var from = page * PAGE_SIZE;
   var to = from + PAGE_SIZE;
   reviewsBlock.classList.remove('reviews-list-loading');
   reviewsToRender.slice(from, to).forEach(function(review) {
-    getReviewElement(review, reviewsContainer);
+    renderedReviews.push(new Review(review, reviewsContainer));
   });
   if (reviewsToRender.length > 3) {
     moreReviews.classList.remove('invisible');
