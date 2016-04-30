@@ -48,7 +48,6 @@ var getReviewElement = function(data, container) {
     authorImage.src = '';
     element.classList.add('review-load-failure');
   }, IMAGE_LOAD_TIMEOUT);
-
   return element;
 };
 module.exports = getReviewElement;
