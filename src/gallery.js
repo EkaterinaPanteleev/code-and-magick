@@ -17,6 +17,7 @@ var Gallery = function() {
   var totalNumber = this.element.querySelector('.preview-number-total');
   var imgs = document.querySelectorAll('.photogallery-image > img');
 
+
   this.activePicture = 0;
   this.picturesToShow = [];
 
@@ -27,6 +28,8 @@ var Gallery = function() {
     }
     return this.picturesToShow;
   };
+
+  this.getPictures();
 
   this.controlCheck = function() {
     if (this.activePicture <= 0) {
