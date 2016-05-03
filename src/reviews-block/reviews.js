@@ -37,10 +37,6 @@ var pageNumber = 0;
 
 /** @param {Array.<Object>} reviews */
 var renderReviews = function(reviewsToRender, page, replace) {
-  /*if(replace) {
-    reviewsContainer.innerHTML = '';
-    moreReviews.classList.add('invisible');
-  }*/
   if(replace) {
     renderedReviews.forEach(function(review) {
       review.remove();
@@ -53,7 +49,9 @@ var renderReviews = function(reviewsToRender, page, replace) {
   reviewsToRender.slice(from, to).forEach(function(review) {
     renderedReviews.push(new Review(review, reviewsContainer));
   });
-  if (reviewsToRender.length > 3) {
+  if (reviewsToRender.length <= 3) {
+    moreReviews.classList.add('invisible');
+  } else {
     moreReviews.classList.remove('invisible');
   }
 };
@@ -62,12 +60,15 @@ var setFilterEnabled = function(filter) {
   filteredReviews = getFilteredReviews(reviews, filter);
   pageNumber = 0;
   renderReviews(filteredReviews, pageNumber, true);
+  document.getElementById(filter).checked = true;
 };
 
 var setFiltrationEnabled = function() {
   filtersContainer.addEventListener('click', function(event) {
     if (event.target.classList.contains('reviews-filter-item')) {
-      setFilterEnabled(event.target.getAttribute('for'));
+      var currentFilter = event.target.getAttribute('for');
+      setFilterEnabled(currentFilter);
+      localStorage.setItem('savedFilter', currentFilter);
     }
   });
 };
@@ -87,7 +88,11 @@ var getMoreReviews = function() {
 load(REVIEWS_LOAD_URL, function(loadedReviews) {
   reviews = loadedReviews;
   setFiltrationEnabled(true);
-  setFilterEnabled(DEFAULT_FILTER);
+  if (localStorage.getItem('savedFilter') === null) {
+    setFilterEnabled(DEFAULT_FILTER);
+  } else {
+    setFilterEnabled(localStorage.getItem('savedFilter'));
+  }
   getMoreReviews();
   filtersContainer.classList.remove('invisible');
 });
