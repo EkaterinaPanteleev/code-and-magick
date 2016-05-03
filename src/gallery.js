@@ -53,16 +53,13 @@ var Gallery = function() {
       self.hideGallery();
     }
   };
-  this._onPictureClickHandler = function(currentPicture) {
-    this.showGallery(currentPicture);
-  };
 
   this._onPrevClickHandler = function() {
-    self.showGallery(self.activePicture - 1);
+    location.hash = '#photo/' + self.picturesToShow[self.activePicture - 1];
   };
 
   this._onNextClickHandler = function() {
-    self.showGallery(self.activePicture + 1);
+    location.hash = '#photo/' + self.picturesToShow[self.activePicture + 1];
   };
 
   this.showPicture = function(pic) {
@@ -72,8 +69,13 @@ var Gallery = function() {
     pictureElement.src = pic;
   };
 
-  this.showGallery = function(pictureNumber) {
+  this.showGallery = function(pictureSrc) {
     this.element.classList.remove('invisible');
+    for (var i = 0; i < this.picturesToShow.length; i++) {
+      if (this.picturesToShow[i] === pictureSrc) {
+        var pictureNumber = i;
+      }
+    }
     this.activePicture = pictureNumber;
     this.controlCheck();
     currentNumber.innerHTML = pictureNumber + 1;
@@ -85,6 +87,7 @@ var Gallery = function() {
     document.addEventListener('keydown', this._onDocumentKeydownHandler);
   };
   this.hideGallery = function() {
+    location.hash = '';
     this.element.classList.add('invisible');
     controlLeft.removeEventListener('click', this._onPrevClickHandler);
     controlRight.removeEventListener('click', this._onNextClickHandler);
@@ -92,12 +95,23 @@ var Gallery = function() {
     document.removeEventListener('keydown', this._onDocumentKeydownHandler);
   };
 
+  this.onHashChange = function() {
+    var hashData = location.hash.match(/#photo\/(\S+)/);
+    if (hashData) {
+      self.showGallery(hashData[1]);
+    }
+  };
+
+  window.addEventListener('hashchange', this.onHashChange);
+
   for (var i = 0; i < imgs.length; i++) {
     imgs[i].addEventListener('click', (function(memorizedI) {
-      return function() {
-        self._onPictureClickHandler(memorizedI);
+      return function(event) {
+        event.preventDefault();
+        location.hash = '#photo/img/screenshots/' + (memorizedI + 1) + '.png';
       };
     })(i));
   }
+  this.onHashChange();
 };
 module.exports = new Gallery();
