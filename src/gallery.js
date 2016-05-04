@@ -71,11 +71,7 @@ var Gallery = function() {
 
   this.showGallery = function(pictureSrc) {
     this.element.classList.remove('invisible');
-    for (var i = 0; i < this.picturesToShow.length; i++) {
-      if (this.picturesToShow[i] === pictureSrc) {
-        var pictureNumber = i;
-      }
-    }
+    var pictureNumber = this.picturesToShow.indexOf(pictureSrc);
     this.activePicture = pictureNumber;
     this.controlCheck();
     currentNumber.innerHTML = pictureNumber + 1;
@@ -105,10 +101,11 @@ var Gallery = function() {
   window.addEventListener('hashchange', this.onHashChange);
 
   for (var i = 0; i < imgs.length; i++) {
-    imgs[i].addEventListener('click', (function(memorizedI) {
+    imgs[i].addEventListener('click', (function() {
+      var hashSrc = imgs[i].getAttribute('src');
       return function(event) {
         event.preventDefault();
-        location.hash = '#photo/img/screenshots/' + (memorizedI + 1) + '.png';
+        location.hash = '#photo/' + hashSrc;
       };
     })(i));
   }
