@@ -26,7 +26,10 @@
   var blockLabel = document.querySelector('.review-fields');
   var requiredName = document.querySelector('.required-field-name');
   var requiredDescription = document.querySelector('.required-field-desc');
+  var nameErrorMessage = document.querySelector('.field-name-error-message');
+  var descErrorMessage = document.querySelector('.field-desc-error-message');
   submitButton.disabled = true;
+  name.required = true;
   requiredDescription.classList.add('invisible');
   requiredName.classList.remove('invisible');
   nameLabel.classList.remove('invisible');
@@ -39,8 +42,10 @@
     var reviewMarkChecked = document.querySelector('input[name="review-mark"]:checked');
     submitButton.disabled = true;
     if (reviewMarkChecked.value < 3) {
+      description.required = true;
+      descErrorMessage.innerHTML = description.validationMessage;
       requiredDescription.classList.remove('invisible');
-      if (description.value) {
+      if (description.checkValidity()) {
         submitButton.disabled = false;
         isValid = true;
         descriptionLabel.classList.add('invisible');
@@ -50,16 +55,20 @@
         requiredDescription.classList.remove('invisible');
       }
     } else {
+      description.required = false;
+      descErrorMessage.innerHTML = '';
       requiredDescription.classList.add('invisible');
       submitButton.disabled = false;
       isValid = true;
       descriptionLabel.classList.add('invisible');
     }
 
-    if (name.value) {
+    if (name.checkValidity()) {
       nameLabel.classList.add('invisible');
       requiredName.classList.add('invisible');
+      nameErrorMessage.innerHTML = '';
     } else {
+      nameErrorMessage.innerHTML = name.validationMessage;
       nameLabel.classList.remove('invisible');
       requiredName.classList.remove('invisible');
     }

@@ -386,15 +386,44 @@
         var y = 80;
         var msgWidth = maxWidth + 25;
         var msgParal = 20;
-        var msgHeight = 150;
 
-        /*отрисовка блока сообщения*/
+        /*размер шрифта*/
+
+        ctx.font = '16px PT Mono';
+
+
+        /*перенос слов по строкам*/
+        /*потсчет высоты сообщения*/
+        var words = msgText.split(' ');
+        var line = '';
+        var linesToDraw = 1;
+        var linesArray = [];
+        var lineHeight = 25;
+        var marginLeft = x + 10;
+        var marginTop = y + 10;
+        for(var i = 0; i < words.length; i++) {
+          var testLine = line + words[i] + ' ';
+          var testWidth = ctx.measureText(testLine).width;
+          if(testWidth > maxWidth) {
+            linesArray.push({line: line, marginTop: marginTop});
+            linesToDraw++;
+            line = words[i] + ' ';
+            marginTop += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        linesArray.push({line: line, marginTop: marginTop});
+
+        /*отрисовка блока сообщения и тени*/
         ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
         ctx.shadowOffsetX = 10;
         ctx.shadowOffsetY = 10;
         ctx.fillStyle = '#fff';
         ctx.beginPath();
         ctx.moveTo(x, y);
+
+        var msgHeight = linesToDraw * lineHeight;
         ctx.lineTo(x + msgWidth, y - msgParal);
         ctx.lineTo((x + msgWidth) - msgParal, y + msgHeight);
         ctx.lineTo(x - msgParal, (y + msgHeight) + msgParal);
@@ -405,25 +434,11 @@
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.fillStyle = '#000';
-        ctx.font = '16px PT Mono';
         ctx.textBaseline = 'hanging';
-        var words = msgText.split(' ');
-        var line = '';
-        var lineHeight = 25;
-        var marginLeft = x + 10;
-        var marginTop = y + 10;
-        for(var i = 0; i < words.length; i++) {
-          var testLine = line + words[i] + ' ';
-          var testWidth = ctx.measureText(testLine).width;
-          if(testWidth > maxWidth) {
-            ctx.fillText(line, marginLeft, marginTop);
-            line = words[i] + ' ';
-            marginTop += lineHeight;
-          } else {
-            line = testLine;
-          }
+
+        for(i = 0; i < linesArray.length; i++) {
+          ctx.fillText(linesArray[i].line, marginLeft, linesArray[i].marginTop);
         }
-        ctx.fillText(line, marginLeft, marginTop);
       };
 
       switch (this.state.currentStatus) {

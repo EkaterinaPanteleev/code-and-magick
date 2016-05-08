@@ -6,17 +6,16 @@
 
 'use strict';
 var gallery = require('./gallery');
+var imgs = gallery.imgs;
 
-var imgs = document.querySelectorAll('.photogallery-image > img');
+var setHash = function(event) {
+  var hashSrc = this.getAttribute('src');
+  event.preventDefault();
+  location.hash = '#photo/' + hashSrc;
+};
 
 for (var i = 0; i < imgs.length; i++) {
-  imgs[i].addEventListener('click', (function() {
-    var hashSrc = imgs[i].getAttribute('src');
-    return function(event) {
-      event.preventDefault();
-      location.hash = '#photo/' + hashSrc;
-    };
-  })(i));
+  imgs[i].addEventListener('click', setHash);
 }
 
 var onHashChange = function() {

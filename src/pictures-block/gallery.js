@@ -31,10 +31,9 @@ var Gallery = function() {
 };
 
 Gallery.prototype.getPictures = function() {
-  for (var i = 0; i < this.imgs.length; i++) {
-    var src = this.imgs[i].getAttribute('src');
-    this.picturesToShow.push(src);
-  }
+  this.picturesToShow = Array.prototype.map.call(this.imgs, function(obj) {
+    return obj.getAttribute('src');
+  });
   return this.picturesToShow;
 };
 
