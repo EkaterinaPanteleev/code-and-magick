@@ -401,18 +401,18 @@
         var lineHeight = 25;
         var marginLeft = x + 10;
         var marginTop = y + 10;
-        for(var i = 0; i < words.length; i++) {
-          var testLine = line + words[i] + ' ';
+        words.forEach(function(word) {
+          var testLine = line + word + ' ';
           var testWidth = ctx.measureText(testLine).width;
           if(testWidth > maxWidth) {
             linesArray.push({line: line, marginTop: marginTop});
             linesToDraw++;
-            line = words[i] + ' ';
+            line = word + ' ';
             marginTop += lineHeight;
           } else {
             line = testLine;
           }
-        }
+        });
         linesArray.push({line: line, marginTop: marginTop});
 
         /*отрисовка блока сообщения и тени*/
@@ -436,9 +436,9 @@
         ctx.fillStyle = '#000';
         ctx.textBaseline = 'hanging';
 
-        for(i = 0; i < linesArray.length; i++) {
-          ctx.fillText(linesArray[i].line, marginLeft, linesArray[i].marginTop);
-        }
+        linesArray.forEach(function(row) {
+          ctx.fillText(row.line, marginLeft, row.marginTop);
+        });
       };
 
       switch (this.state.currentStatus) {
